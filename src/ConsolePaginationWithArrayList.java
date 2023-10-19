@@ -35,7 +35,6 @@ public class ConsolePaginationWithArrayList {
             for (int i = startIndex; i < endIndex; i++) {
                 System.out.println(data.get(i));
             }
-
             System.out.println("\nPage " + (currentPage + 1) + " of " + (int) Math.ceil((double) data.size() / itemsPerPage));
 
             System.out.println("Enter 'n' for next page, 'p' for previous page, 's' to set the number of rows per page, or 'q' to quit:");
