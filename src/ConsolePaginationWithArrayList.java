@@ -31,31 +31,39 @@ public class ConsolePaginationWithArrayList {
             int startIndex = currentPage * itemsPerPage;
             int endIndex = Math.min(startIndex + itemsPerPage, data.size());
 
-            // Display the current page of data
-            for (int i = startIndex; i < endIndex; i++) {
-                System.out.println(data.get(i));
-            }
-
+            displayCurrentPage(data, currentPage);
 
             System.out.println("\nPage " + (currentPage + 1) + " of " + (int) Math.ceil((double) data.size() / itemsPerPage));
-
-            System.out.println("Enter 'n' for next page, 'p' for previous page, 's' to set the number of rows per page, or 'q' to quit:");
+            System.out.println("Enter 'n' for next page, 'p' for the previous page, 's' to set the number of rows per page, 'l' for the last page, 'q' to quit, or 'f' to search:");
             String input = scanner.nextLine();
 
-            if (input.equals("n") && endIndex < data.size()) {
-                currentPage++;
-            } else if (input.equals("p") && currentPage > 0) {
-                currentPage--;
-            } else if (input.equals("s")) {
-                setRowsPerPage(scanner);
-            } else if (input.equals("q")) {
-                break;
-            } else {
-                System.out.println("Invalid input. Please enter 'n', 'p', 's', or 'q'.");
+            switch (input) {
+                case "n":
+                    if (endIndex < data.size()) {
+                        currentPage++;
+                    }
+                    break;
+                case "p":
+                    if (currentPage > 0) {
+                        currentPage--;
+                    }
+                    break;
+                case "s":
+                    setRowsPerPage(scanner);
+                    break;
+                case "l":
+                    currentPage = (int) Math.ceil((double) data.size() / itemsPerPage) - 1;
+                    break;
+                case "f":
+                    search(data);
+                    break;
+                case "q":
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid input. Please enter 'n', 'p', 's', 'l', 'f', or 'q'.");
             }
         }
-
-        scanner.close();
     }
 
     private static List<Item> generateData() {
@@ -78,5 +86,31 @@ public class ConsolePaginationWithArrayList {
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a positive integer for rows per page.");
         }
+    }
+
+    private static void displayCurrentPage(List<Item> data, int currentPage) {
+        int startIndex = currentPage * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, data.size());
+
+        // Display the current page of data
+        for (int i = startIndex; i < endIndex; i++) {
+            System.out.println(data.get(i));
+        }
+    }
+
+    private static void search(List<Item> data) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a search keyword: ");
+        String keyword = scanner.nextLine().toLowerCase();
+
+        List<Item> results = new ArrayList<>();
+        for (Item item : data) {
+            if (item.toString().toLowerCase().contains(keyword)) {
+                results.add(item);
+            }
+        }
+
+        System.out.println("Search results:");
+        displayCurrentPage(results, 0);
     }
 }
